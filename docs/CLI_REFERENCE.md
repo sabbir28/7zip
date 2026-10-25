@@ -87,3 +87,38 @@ The unified command-line executable (`7zz`) provides high-performance archiving,
 ```powershell
 7zz b -mmt=4
 ```
+
+---
+
+## 5. Converting ZIP / Folders into Self-Extracting Executables (.EXE)
+
+7-Zip provides built-in Windows GUI Self-Extracting Archive (SFX) capability via `7z.sfx` and `7zCon.sfx`. This allows converting any ZIP archive, 7z archive, or directory into a standalone `.exe` that recipients can double-click to unzip without needing 7-Zip, WinRAR, or any decompression software installed on their PC.
+
+### Automated Converter Tool (`scripts/zip_to_exe.ps1`)
+
+```powershell
+# Convert any .zip file into a self-extracting .exe
+.\scripts\zip_to_exe.ps1 -InputPath "C:\Downloads\MyApp.zip"
+
+# Convert with custom extraction window title and destination prompt
+.\scripts\zip_to_exe.ps1 -InputPath "release.zip" -OutputPath "MyAppSetup.exe" -Title "Installer Wizard" -BeginPrompt "Do you want to extract MyApp files?"
+
+# Convert an entire folder into a standalone extractor
+.\scripts\zip_to_exe.ps1 -InputPath "C:\MyDataFolder" -OutputPath "MyData.exe"
+
+# Add AES-256 password protection to the self-extracting executable
+.\scripts\zip_to_exe.ps1 -InputPath "secrets.zip" -Password "SecretPass2026!"
+```
+
+### How End-Users Unzip the Output `.exe`
+
+1. **Interactive GUI Extraction**:
+   - The user double-clicks `MyApp.exe`.
+   - A clean native Windows dialog opens displaying the destination folder picker (`Extract to:`) and an `Extract` button.
+   - Clicking `Extract` automatically unpacks all files.
+2. **Command-Line & Silent Unpacking**:
+   ```cmd
+   # Extract silently to a specified target directory
+   MyApp.exe -o"C:\TargetFolder" -y
+   ```
+

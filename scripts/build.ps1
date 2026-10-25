@@ -1,7 +1,7 @@
 # 7-Zip Automated Build Script
 [CmdletBinding()]
 param(
-    [ValidateSet("7zz", "7za", "7zFM", "7z", "7z.dll", "all")]
+    [ValidateSet("7zz", "7za", "7zFM", "7zG", "7z", "7z.dll", "7z.sfx", "7zCon.sfx", "gui", "sfx", "all")]
     [string]$Target = "7zz",
 
     [ValidateSet("x64", "x86", "arm64")]
@@ -62,17 +62,21 @@ if (-not (Test-Path $BinDir)) {
 }
 
 $TargetMap = @{
-    "7zz"    = @{ SubDir = "CPP\7zip\Bundles\Alone2"; Output = "7zz.exe" }
-    "7za"    = @{ SubDir = "CPP\7zip\Bundles\Alone"; Output = "7za.exe" }
-    "7zFM"   = @{ SubDir = "CPP\7zip\Bundles\Fm"; Output = "7zFM.exe" }
-    "7z.dll" = @{ SubDir = "CPP\7zip\Bundles\Format7zF"; Output = "7z.dll" }
-    "7z"     = @{ SubDir = "CPP\7zip\UI\Console"; Output = "7z.exe" }
+    "7zz"       = @{ SubDir = "CPP\7zip\Bundles\Alone2"; Output = "7zz.exe" }
+    "7za"       = @{ SubDir = "CPP\7zip\Bundles\Alone"; Output = "7za.exe" }
+    "7zFM"      = @{ SubDir = "CPP\7zip\Bundles\Fm"; Output = "7zFM.exe" }
+    "7zG"       = @{ SubDir = "CPP\7zip\UI\GUI"; Output = "7zG.exe" }
+    "7z.dll"    = @{ SubDir = "CPP\7zip\Bundles\Format7zF"; Output = "7z.dll" }
+    "7z"        = @{ SubDir = "CPP\7zip\UI\Console"; Output = "7z.exe" }
+    "7z.sfx"    = @{ SubDir = "CPP\7zip\Bundles\SFXWin"; Output = "7z.sfx" }
+    "7zCon.sfx" = @{ SubDir = "CPP\7zip\Bundles\SFXCon"; Output = "7zCon.sfx" }
 }
 
-$TargetsToBuild = if ($Target -eq "all") {
-    @("7zz", "7za", "7z.dll", "7z", "7zFM")
-} else {
-    @($Target)
+$TargetsToBuild = switch ($Target) {
+    "all" { @("7zz", "7za", "7z.dll", "7z", "7zFM", "7zG", "7z.sfx", "7zCon.sfx") }
+    "gui" { @("7zFM", "7zG", "7z.dll", "7z.sfx") }
+    "sfx" { @("7z.sfx", "7zCon.sfx") }
+    default { @($Target) }
 }
 
 foreach ($t in $TargetsToBuild) {

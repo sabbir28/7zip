@@ -27,17 +27,27 @@ The automated script automatically discovers MSVC tools and builds the specified
 # 1. Build unified standalone 7zz CLI (all archive formats)
 .\scripts\build.ps1 -Target 7zz -Platform x64
 
-# 2. Build lightweight 7za CLI (7z/zip/cab/gzip/bzip2/tar)
-.\scripts\build.ps1 -Target 7za -Platform x64
+# 2. Build full GUI Suite (7zFM.exe, 7zG.exe, 7z.dll, 7z.sfx)
+.\scripts\build.ps1 -Target gui -Platform x64
 
-# 3. Build full suite (7zz, 7za, 7z.dll, 7z.exe, 7zFM.exe)
+# 3. Build Self-Extracting Modules (7z.sfx, 7zCon.sfx)
+.\scripts\build.ps1 -Target sfx -Platform x64
+
+# 4. Build complete repository deliverables (CLI, GUI, DLLs, SFX)
 .\scripts\build.ps1 -Target all -Platform x64
 
-# 4. Clean and rebuild
-.\scripts\build.ps1 -Target 7zz -Platform x64 -Clean
+# 5. Clean and rebuild
+.\scripts\build.ps1 -Target all -Platform x64 -Clean
 ```
 
-All compiled binaries are automatically deployed to `bin\<Platform>\` (e.g. `bin\x64\7zz.exe`).
+All compiled binaries are automatically deployed to `bin\<Platform>\`:
+- `bin\x64\7zFM.exe`: 7-Zip File Manager GUI application
+- `bin\x64\7zG.exe`: 7-Zip GUI dialogs (compression/extraction progress)
+- `bin\x64\7z.dll`: Full archive engine dynamic library
+- `bin\x64\7zz.exe`: Unified standalone command-line executable
+- `bin\x64\7za.exe`: Lightweight standalone command-line executable
+- `bin\x64\7z.sfx`: Windows GUI self-extracting archive module
+- `bin\x64\7zCon.sfx`: Console self-extracting archive module
 
 ### Method B: Manual MSVC Command Prompt
 

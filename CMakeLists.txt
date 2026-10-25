@@ -57,6 +57,40 @@ if(WIN32)
             WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CPP/7zip/Bundles/Fm"
             COMMENT "Compiling 7zFM (7-Zip File Manager GUI) via NMAKE..."
         )
+
+        add_custom_target(7zG
+            COMMAND ${NMAKE_EXECUTABLE}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CPP/7zip/UI/GUI"
+            COMMENT "Compiling 7zG (7-Zip GUI Dialogs) via NMAKE..."
+        )
+
+        add_custom_target(7z_dll
+            COMMAND ${NMAKE_EXECUTABLE}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CPP/7zip/Bundles/Format7zF"
+            COMMENT "Compiling 7z.dll (Full Archive Engine DLL) via NMAKE..."
+        )
+
+        add_custom_target(7z_sfx
+            COMMAND ${NMAKE_EXECUTABLE}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CPP/7zip/Bundles/SFXWin"
+            COMMENT "Compiling 7z.sfx (Windows GUI Self-Extracting Stub) via NMAKE..."
+        )
+
+        add_custom_target(7zCon_sfx
+            COMMAND ${NMAKE_EXECUTABLE}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CPP/7zip/Bundles/SFXCon"
+            COMMENT "Compiling 7zCon.sfx (Console Self-Extracting Stub) via NMAKE..."
+        )
+
+        add_custom_target(gui
+            DEPENDS 7zFM 7zG 7z_dll 7z_sfx
+            COMMENT "Building all 7-Zip GUI binaries..."
+        )
+
+        add_custom_target(sfx
+            DEPENDS 7z_sfx 7zCon_sfx
+            COMMENT "Building all 7-Zip SFX modules..."
+        )
     endif()
 endif()
 
@@ -66,5 +100,18 @@ enable_testing()
 if(WIN32)
     add_test(NAME Test7zzExecution
         COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test.ps1"
+    )
+
+    add_test(NAME TestZipToExeSFX
+        COMMAND powershell -ExecutionPolicy Bypass -Command "
+            $tmp = Join-Path $env:TEMP ('sfx_cmake_test_' + [Guid]::NewGuid().ToString('N'));
+            New-Item -ItemType Directory -Path $tmp -Force | Out-Null;
+            'Hello from SFX' | Out-File (Join-Path $tmp 'test.txt');
+            & '${CMAKE_CURRENT_SOURCE_DIR}/bin/x64/7zz.exe' a (Join-Path $tmp 'archive.zip') (Join-Path $tmp 'test.txt');
+            & powershell -ExecutionPolicy Bypass -File '${CMAKE_CURRENT_SOURCE_DIR}/scripts/zip_to_exe.ps1' -InputPath (Join-Path $tmp 'archive.zip') -OutputPath (Join-Path $tmp 'archive.exe') -Test;
+            $pass = Test-Path (Join-Path $tmp 'archive.exe');
+            Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue;
+            if (-not $pass) { exit 1 }
+        "
     )
 endif()

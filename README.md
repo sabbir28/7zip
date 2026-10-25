@@ -84,11 +84,21 @@ To compile the standalone unified `7zz.exe` binary:
 .\scripts\build.ps1 -Target 7zz -Platform x64
 ```
 
-To build all deliverables (`7zz.exe`, `7za.exe`, `7zFM.exe`, `7z.dll`):
+To build the full Windows GUI Suite (`7zFM.exe`, `7zG.exe`, `7z.dll`, `7z.sfx`):
+```powershell
+.\scripts\build.ps1 -Target gui -Platform x64
+```
+
+To build all deliverables (CLI, GUI, DLLs, and SFX modules):
 ```powershell
 .\scripts\build.ps1 -Target all -Platform x64
 ```
-Compiled binaries are output to `bin\x64\`.
+Compiled binaries are output to `bin\x64\`:
+- `7zFM.exe` (7-Zip File Manager GUI)
+- `7zG.exe` (7-Zip Compression/Extraction GUI Dialogs)
+- `7z.dll` (Full Archive Engine Library)
+- `7zz.exe` (Unified Multi-Format CLI)
+- `7z.sfx` / `7zCon.sfx` (Self-Extracting Modules)
 
 #### Modern CMake Build
 ```powershell
@@ -104,7 +114,27 @@ make -f ../../cmpl_gcc.mak    # Or make -f ../../cmpl_clang.mak
 
 ---
 
-### 2. Running Automated Tests
+### 2. 🎁 Converting ZIP / Folders into Self-Extracting `.EXE` Files
+
+Convert any `.zip`, `.7z`, or directory into a standalone `.exe` that recipients can double-click to unzip without needing 7-Zip, WinRAR, or any software installed:
+
+```powershell
+# Convert any .zip into an auto-extracting .exe
+.\scripts\zip_to_exe.ps1 -InputPath "C:\MyFiles\archive.zip"
+
+# Convert with custom extraction window title & prompt
+.\scripts\zip_to_exe.ps1 -InputPath "release.zip" -OutputPath "MyAppSetup.exe" -Title "Setup Wizard" -BeginPrompt "Extract files to destination?"
+
+# Convert a folder directly into an .exe
+.\scripts\zip_to_exe.ps1 -InputPath "C:\MyProject\dist" -OutputPath "ProjectPackage.exe"
+```
+**End-User Experience**:
+- Double-clicking `archive.exe` opens a clean native Windows GUI dialog with progress indicator and `Extract` button.
+- Command-line silent extraction: `archive.exe -o"C:\TargetFolder" -y`
+
+---
+
+### 3. Running Automated Tests
 
 Run the integrated functional test suite to validate archive generation, extraction integrity, AES-256 cryptography, and CPU benchmarks:
 ```powershell
@@ -113,7 +143,7 @@ Run the integrated functional test suite to validate archive generation, extract
 
 ---
 
-### 3. Packaging Releases
+### 4. Packaging Releases
 
 To package the built binaries and documentation into a release ZIP with SHA256 checksums:
 ```powershell

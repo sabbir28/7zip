@@ -34,7 +34,7 @@ New-Item -ItemType Directory -Path $StagingDir -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $StagingDir "docs") -Force | Out-Null
 
 # Copy binaries
-$binaries = Get-ChildItem -Path $BinDir -Filter "*.*" | Where-Object { $_.Extension -in @(".exe", ".dll") }
+$binaries = Get-ChildItem -Path $BinDir -Filter "*.*" | Where-Object { $_.Extension -in @(".exe", ".dll", ".sfx") }
 if ($binaries.Count -eq 0) {
     Write-Error "No executables or DLLs found in $BinDir!"
     exit 1
