@@ -11,7 +11,7 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](docs/BUILDING.md)
 [![Standards](https://img.shields.io/badge/standard-C11%20%7C%20C%2B%2B17-blueviolet.svg)](CMakeLists.txt)
 
-[Official Website](https://7-zip.org) • [Documentation](docs/ARCHITECTURE.md) • [Build Guide](docs/BUILDING.md) • [CLI Manual](docs/CLI_REFERENCE.md) • [Changelog](CHANGELOG.md)
+[Official Website](https://7-zip.org) • [Documentation](docs/ARCHITECTURE.md) • [Build Guide](docs/BUILDING.md) • [CLI Manual](docs/CLI_REFERENCE.md) • [OS Integration](docs/OS_INTEGRATION.md) • [Changelog](CHANGELOG.md)
 
 </div>
 
@@ -134,7 +134,34 @@ Convert any `.zip`, `.7z`, or directory into a standalone `.exe` that recipients
 
 ---
 
-### 3. Running Automated Tests
+### 3. 🪟 Windows OS Integration & Right-Click Context Menu
+
+Integrate 7-Zip directly into Windows Explorer to extract and inspect `.exe`, `.zip`, `.7z`, and other containers from the right-click menu:
+
+```powershell
+# Install context menu actions (Current User - No Administrator prompt required)
+.\scripts\integrate_os.ps1
+
+# Check current integration status
+.\scripts\integrate_os.ps1 -Status
+
+# Uninstall context menus cleanly
+.\scripts\integrate_os.ps1 -Uninstall
+```
+
+**Enabled Shell Features**:
+- **Right-click any archive or `.exe` installer**:
+  - `Extract with 7-Zip...` (launches GUI extraction dialog with folder picker)
+  - `Inspect in 7-Zip Archive Manager` (browse inside installers or archives safely)
+  - `7-Zip` cascading sub-menu (*Extract Here*, *Extract to \<Name>\\*, *Test archive*, *Compress*, *Convert to EXE*)
+- **Right-click any folder**:
+  - `7-Zip` -> *Add to archive...*, *Add to \<Folder>.7z*, *Add to \<Folder>.zip*, *Package as Self-Extracting (.EXE)*
+
+For full technical specifications, see the [OS Integration Guide](docs/OS_INTEGRATION.md).
+
+---
+
+### 4. Running Automated Tests
 
 Run the integrated functional test suite to validate archive generation, extraction integrity, AES-256 cryptography, and CPU benchmarks:
 ```powershell

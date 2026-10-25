@@ -1,7 +1,7 @@
 # 7-Zip Automated Build Script
 [CmdletBinding()]
 param(
-    [ValidateSet("7zz", "7za", "7zFM", "7zG", "7z", "7z.dll", "7z.sfx", "7zCon.sfx", "gui", "sfx", "all")]
+    [ValidateSet("7zz", "7za", "7zFM", "7zG", "7z", "7z.dll", "7-zip.dll", "7z.sfx", "7zCon.sfx", "gui", "sfx", "shell", "all")]
     [string]$Target = "7zz",
 
     [ValidateSet("x64", "x86", "arm64")]
@@ -67,15 +67,17 @@ $TargetMap = @{
     "7zFM"      = @{ SubDir = "CPP\7zip\Bundles\Fm"; Output = "7zFM.exe" }
     "7zG"       = @{ SubDir = "CPP\7zip\UI\GUI"; Output = "7zG.exe" }
     "7z.dll"    = @{ SubDir = "CPP\7zip\Bundles\Format7zF"; Output = "7z.dll" }
+    "7-zip.dll" = @{ SubDir = "CPP\7zip\UI\Explorer"; Output = "7-zip.dll" }
     "7z"        = @{ SubDir = "CPP\7zip\UI\Console"; Output = "7z.exe" }
     "7z.sfx"    = @{ SubDir = "CPP\7zip\Bundles\SFXWin"; Output = "7z.sfx" }
     "7zCon.sfx" = @{ SubDir = "CPP\7zip\Bundles\SFXCon"; Output = "7zCon.sfx" }
 }
 
 $TargetsToBuild = switch ($Target) {
-    "all" { @("7zz", "7za", "7z.dll", "7z", "7zFM", "7zG", "7z.sfx", "7zCon.sfx") }
-    "gui" { @("7zFM", "7zG", "7z.dll", "7z.sfx") }
-    "sfx" { @("7z.sfx", "7zCon.sfx") }
+    "all"   { @("7zz", "7za", "7z.dll", "7-zip.dll", "7z", "7zFM", "7zG", "7z.sfx", "7zCon.sfx") }
+    "gui"   { @("7zFM", "7zG", "7z.dll", "7-zip.dll", "7z.sfx") }
+    "shell" { @("7-zip.dll") }
+    "sfx"   { @("7z.sfx", "7zCon.sfx") }
     default { @($Target) }
 }
 

@@ -82,8 +82,14 @@ if(WIN32)
             COMMENT "Compiling 7zCon.sfx (Console Self-Extracting Stub) via NMAKE..."
         )
 
+        add_custom_target(7_zip_dll
+            COMMAND ${NMAKE_EXECUTABLE}
+            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/CPP/7zip/UI/Explorer"
+            COMMENT "Compiling 7-zip.dll (Explorer Shell Extension) via NMAKE..."
+        )
+
         add_custom_target(gui
-            DEPENDS 7zFM 7zG 7z_dll 7z_sfx
+            DEPENDS 7zFM 7zG 7z_dll 7_zip_dll 7z_sfx
             COMMENT "Building all 7-Zip GUI binaries..."
         )
 
@@ -113,5 +119,9 @@ if(WIN32)
             Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue;
             if (-not $pass) { exit 1 }
         "
+    )
+
+    add_test(NAME TestOSIntegration
+        COMMAND powershell -ExecutionPolicy Bypass -File "${CMAKE_CURRENT_SOURCE_DIR}/scripts/integrate_os.ps1" -Status
     )
 endif()
