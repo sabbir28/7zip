@@ -1,0 +1,56 @@
+7-Zip Source Code License
+==========================
+
+7-Zip is Copyright (C) 1999-2026 Igor Pavlov.
+
+The majority of source code in 7-Zip is distributed under the GNU LGPL version 2.1 (or later).
+Sub-components and specific files are licensed as follows:
+
+1. GNU LGPL version 2.1 or later:
+   Applies to the core codebase unless explicitly stated otherwise.
+   See full text below and in DOC/copying.txt.
+
+2. GNU LGPL with "unRAR license restriction":
+   Applies to CPP/7zip/Compress/Rar* files.
+   See DOC/unRarLicense.txt for full unRAR license terms.
+
+3. BSD 3-Clause License:
+   Applies to:
+   - CPP/7zip/Compress/LzfseDecoder.cpp (Copyright (c) 2015-2016 Apple Inc.)
+   - C/ZstdDec.c (derived from Zstandard, Copyright (c) Facebook, Inc.)
+
+4. BSD 2-Clause License:
+   Applies to:
+   - C/Xxh64.c (xxHash, Copyright (c) Yann Collet)
+
+5. Public Domain:
+   Certain compression/decompression algorithms and utility routines are explicitly marked
+   as Public Domain in their source file headers (e.g., LZMA SDK core files).
+
+---
+
+GNU LESSER GENERAL PUBLIC LICENSE
+Version 2.1, February 1999
+
+Copyright (C) 1991, 1999 Free Software Foundation, Inc.
+51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+
+[This is the first released version of the Lesser GPL.  It also counts
+ as the successor of the GNU Library Public License, version 2, hence
+ the version number 2.1.]
+
+Preamble
+
+The licenses for most software are designed to take away your freedom to share and change it.
+By contrast, the GNU General Public Licenses are intended to guarantee your freedom to share
+and change free software--to make sure the software is free for all its users.
+
+This license, the Lesser General Public License, applies to some specially designated software
+packages--typically libraries--of the Free Software Foundation and other authors who decide to
+use it. You can use it too, but we suggest you first think carefully about whether this license
+or the ordinary General Public License is the better strategy in any particular case, based on
+the explanations below.
+
+For complete license text, refer to DOC/copying.txt and DOC/License.txt included in this repository.

@@ -1,0 +1,81 @@
+# Build Directories and Output Folders
+bin/
+build/
+dist/
+release_dist/
+out/
+cmake-build-*/
+x64/
+x86/
+ARM64/
+ARM/
+b/
+O/
+$O/
+
+# Visual Studio & MSVC Intermediate Files
+*.obj
+*.res
+*.lib
+*.exp
+*.pdb
+*.ilk
+*.idb
+*.aps
+*.manifest
+*.pch
+*.ipch
+
+# Executables and Libraries
+*.exe
+*.dll
+*.sfx
+*.so
+*.dylib
+*.a
+
+# Visual Studio Project User Files & Caches
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+
+# CMake Artifacts
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTesting/
+CTestTestfile.cmake
+Testing/
+Makefile
+compile_commands.json
+
+# Ninja Build Files
+.ninja_deps
+.ninja_log
+build.ninja
+
+# Temporary and Editor Files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.code-workspace
+
+# Archive packages
+*.zip
+*.7z
+*.tar.gz
+*.tar.xz

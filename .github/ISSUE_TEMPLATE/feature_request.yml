@@ -1,0 +1,28 @@
+name: Feature Request
+description: Propose an enhancement, new archive format, or algorithmic improvement
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting a feature request for 7-Zip!
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear and concise description of what the problem or limitation is.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the Solution You'd Like
+      description: A clear and concise description of the feature or behavior you want.
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context or Technical References
+      description: Links to format specs, RFCs, compression algorithms, or benchmark comparisons.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 7-Zip Official Website
+    url: https://7-zip.org
+    about: Official downloads, release announcements, and news.
+  - name: 7-Zip SourceForge Forum
+    url: https://sourceforge.net/p/sevenzip/discussion/
+    about: Community discussions, questions, and feature inquiries.

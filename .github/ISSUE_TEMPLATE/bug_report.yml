@@ -1,0 +1,69 @@
+name: Bug Report
+description: Report an issue, crash, or unexpected behavior in 7-Zip
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please verify you are using the latest version of 7-Zip before submitting.
+  - type: dropdown
+    id: version
+    attributes:
+      label: 7-Zip Version
+      options:
+        - "26.05"
+        - "26.04"
+        - "26.03"
+        - "26.02"
+        - "26.01"
+        - "26.00"
+        - "Other / Git Main"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System & Architecture
+      options:
+        - "Windows 11 (x64)"
+        - "Windows 11 (ARM64)"
+        - "Windows 10 (x64 / x86)"
+        - "Windows Server"
+        - "Linux (x64)"
+        - "Linux (ARM64)"
+        - "macOS (Apple Silicon)"
+        - "macOS (Intel)"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the behavior.
+      placeholder: |
+        1. Run command '7zz a test.7z file.dat'
+        2. Execute '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Output / Logs
+      description: Paste any error messages, debug output, or terminal dumps here.
+      render: shell

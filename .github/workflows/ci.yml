@@ -1,0 +1,75 @@
+name: CI - Build & Test Matrix
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Windows MSVC (x64 / x86)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ x64, x86 ]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.platform }}
+
+      - name: Build Standalone 7zz Executable
+        shell: pwsh
+        run: |
+          .\scripts\build.ps1 -Target 7zz -Platform ${{ matrix.platform }}
+
+      - name: Run Functional Test Suite
+        shell: pwsh
+        run: |
+          .\scripts\test.ps1 -ExePath "bin\${{ matrix.platform }}\7zz.exe"
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: 7zip-windows-${{ matrix.platform }}
+          path: bin/${{ matrix.platform }}/
+
+  build-posix:
+    name: POSIX (${{ matrix.os }} - ${{ matrix.compiler }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        compiler: [ gcc, clang ]
+        exclude:
+          - os: macos-latest
+            compiler: gcc
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Compile 7zz on POSIX
+        run: |
+          cd CPP/7zip/Bundles/Alone2
+          if [ "${{ matrix.compiler }}" = "clang" ]; then
+            make -f ../../cmpl_clang.mak
+          else
+            make -f ../../cmpl_gcc.mak
+          fi
+
+      - name: Verify 7zz Execution
+        run: |
+          ./CPP/7zip/Bundles/Alone2/b/${{ matrix.compiler }}/7zz i
+          ./CPP/7zip/Bundles/Alone2/b/${{ matrix.compiler }}/7zz b 1

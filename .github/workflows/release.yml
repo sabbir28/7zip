@@ -1,0 +1,81 @@
+name: Publish Official Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release Version (e.g. v26.05)'
+        required: false
+        default: 'v26.05'
+
+permissions:
+  contents: write
+
+jobs:
+  release-build:
+    name: Build & Package Windows Artifacts
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        platform: [ x64, x86, arm64 ]
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up MSVC Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.platform }}
+
+      - name: Compile 7-Zip Binaries
+        shell: pwsh
+        run: |
+          .\scripts\build.ps1 -Target all -Platform ${{ matrix.platform }}
+
+      - name: Package Release Archive
+        shell: pwsh
+        run: |
+          $ver = if ("${{ github.ref_name }}".StartsWith("v")) { "${{ github.ref_name }}".TrimStart("v") } else { "${{ github.event.inputs.release_version }}".TrimStart("v") }
+          if (-not $ver) { $ver = "26.05" }
+          .\scripts\package.ps1 -Version $ver -Platform ${{ matrix.platform }}
+
+      - name: Upload Packaged Zip as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 7zip-dist-${{ matrix.platform }}
+          path: dist/*
+
+  create-github-release:
+    name: Create GitHub Release & Upload Assets
+    needs: release-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download All Built Packages
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Prepare Final Assets & Generate Checksums
+        run: |
+          mkdir -p final-dist
+          find release-artifacts -type f \( -name "*.zip" -o -name "*.tar.xz" \) -exec cp {} final-dist/ \;
+          cd final-dist
+          sha256sum *.zip > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            final-dist/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          name: "7-Zip ${{ github.ref_name || github.event.inputs.release_version }}"

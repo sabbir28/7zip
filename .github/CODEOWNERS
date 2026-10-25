@@ -1,0 +1,12 @@
+# Global Code Owners
+* @sabbir28
+
+# Core C & C++ Archives
+/C/ @sabbir28
+/CPP/7zip/Archive/ @sabbir28
+/CPP/7zip/Compress/ @sabbir28
+/CPP/7zip/Crypto/ @sabbir28
+
+# Build & CI Automation
+/.github/ @sabbir28
+/scripts/ @sabbir28
